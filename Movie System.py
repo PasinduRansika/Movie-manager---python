@@ -1,35 +1,33 @@
-# MADE BY V. PASINDU RANSIKA 
+# Created by : V.P Ransika
 
-# headers
+
 print("\n< < < < Pasindu Cinema > > > > \n")
 print("Welcome to the Cinema World !")
 
-
-# movie class
+# Movie class
 class Movie:
-    def __init__(self, movie_id, title, director, year, genre):
-        self.MovieID = movie_id
-        self.Title = title
-        self.Director = director
-        self.Year = year
-        self.Genre = genre
-# how to display when we call
+    def __init__(self, Movie_id, title, director, year, genre):
+        self.Movie_id = Movie_id
+        self.title = title
+        self.director = director
+        self.year = year
+        self.genre = genre
+        
+# this is how display movies when we call them
     def __str__(self):
-        return f"MovieID: {self.MovieID}, Title: {self.Title}, Director: {self.Director}, Year: {self.Year}, Genre: {self.Genre}"
+        return f"Movie-ID: {self.Movie_id}, Title: {self.title}, Director: {self.director}, Year: {self.year}, Genre: {self.genre}"
 
-
-# guiding users by correct inputs
-def id_only(): 
+# Guiding users how to enter 
+def id_only():
     print("(** Please ENTER Movie ID only with numbers! \"ex-1234\" **)\n")
 
 def year_only():
-    print("\n(** Please ENTER YEAR with numbers ! \"ex-2025\" **)\n")
+    print("\n(** Please ENTER YEAR with numbers! \"ex-2025\" **)\n")
 
 def invalid():
-    print("\n# Invalid number #")    
+    print("\n# Invalid Please Enter Correctly #")    
 
-
-# menu function
+# Menu function
 def menu():
     print("\n< : : : : MENU : : : : >\n")
     print("Enter [1] to < ADD A NEW MOVIE >")
@@ -39,74 +37,89 @@ def menu():
     print("Enter [5] to < UPDATE MOVIES >")
     print("Enter [0] to < EXIT >\n")
 
-    choice = int(input("ENTER: ")) #getting choice from users
+    try:
+        choice = int(input("ENTER: "))
+    except ValueError:
+        invalid()
+        menu()
+        
 
-    if choice == 1:
-        first_Menu() # add a movie menu
+    if choice == 1: 
+        first_Menu() # add movie menu
     elif choice == 2:
-        second_Menu() # view all movies
+        second_Menu() # view movie menu
     elif choice == 3:
-        third_Menu() # search movie
+        third_Menu() # search movie menu
     elif choice == 4:
-        forth_Menu() # delete movie
+        fourth_Menu() # delete movie menu
     elif choice == 5:
-        fifth_Menu() # update movie
+        fifth_Menu() # movie update menu
     elif choice == 0:
-        print("\n<<< Thank you ! Have a nice day! >>>\n")
+        print("\n<<< Thank you ! Have a nice day! >>>\n") # exit from menu
     else:
         invalid()
-        menu() # again direct to menu
-
+        menu()
 
 # Exit function
 def exit_fun():
     print("\n<< Enter 0 to BACK >>\n")
-    choice = int(input("ENTER: "))
-    if choice == 0:
+    try:
+        choice = int(input("ENTER: "))
+    except ValueError:
+        invalid()
+        exit_fun()
+    
+    if choice == 0: 
         menu()
     else:
         invalid()
         exit_fun()
 
-
 # Movie list
 movies = []
-
 
 # Add movie
 def first_Menu():
     print("\n< : : : : Add a New Movie : : : : >\n")
-    id_only() #guiding
-    movieid = int(input("Enter Movie ID: "))
-    
+    id_only() # enter number only
+    try:
+        movieid = int(input("Enter Movie ID: "))
+    except ValueError:
+        invalid()
+        exit_fun()
+
     for movie in movies:
-        if movie.MovieID == movieid:
+        if movie.Movie_id == movieid:
             print("\n!!! Movie ID already exists !!!")
             exit_fun()
-            return
+            return # exit function if Movie_id == movieid  
 
+# if it is not it will start here
     title = input("Enter Title: ")
     director = input("Enter Director: ")
-    year_only() #guiding
-    year = int(input("Enter Release Year: "))
+    year_only() # enter number only
+    try:
+        year = int(input("Enter Release Year: "))
+    except ValueError:
+        invalid()
+        exit_fun()
+
     genre = input("Enter Genre: ")
-    
     new_movie = Movie(movieid, title, director, year, genre)
-    movies.append(new_movie) #movies will be added 
+    movies.append(new_movie) # movie added
 
     print("\n*** Successfully added to the system ***")
     exit_fun()
-
 
 # View all movies
 def second_Menu():
     print("\n< : : : : Our Movies : : : : >\n")
     if not movies:
         print("\n!!! No movies added yet !!!")
-    for movie in movies:
-        print(movie) # print all movies
+    else:
+        for movie in movies:
+            print(movie) # print all movies
     exit_fun()
-
 
 # Search movie
 def third_Menu():
@@ -115,66 +128,87 @@ def third_Menu():
     title = input("\nEnter Title to search: ")
     if title == "0": # another exit
         menu()
-        return
+        return # exit function if title == "0"
 
     for movie in movies:
-        if movie.Title == title:
-            print("Found:", movie)
+        if movie.title == title:
+            print("|**Found**|", movie)
             exit_fun()
-            return
+            return # exit function 
     else:
         print("\n!!! Movie not found !!!")
         third_Menu()
 
-
 # Delete movie
-def forth_Menu():
+def fourth_Menu():
     print("\n< : : : : Delete Movie by ID : : : : >\n")
-    id_only() #guiding
-    movie_id = int(input("Enter Movie ID to delete: "))
+    id_only() # enter number only
+    try:
+        movie_id = int(input("Enter Movie ID to delete: "))
+    except ValueError:
+        invalid()
+        exit_fun()
 
     for movie in movies:
-        if movie.MovieID == movie_id:
-            print("\nMovie Info:", movie) # print relevent movie info
+        if movie.Movie_id == movie_id:
+            print("\nMovie Info:", movie)
             print("\n?? Do You Need To Delete ??\n")
-            confirm = int(input("1 - confirm | 0 - cancel: ")) # delete confirmation 
-            if confirm == 1:
-                movies.remove(movie) # deleted
+            try:
+                confirm = int(input("1 - confirm | 0 - cancel: "))
+            except ValueError:
+                invalid()
+                exit_fun()
+
+            if confirm == 1: # movie delete confirmation
+                movies.remove(movie)
                 print("\n*** Movie deleted successfully ***")
-            else:
+            else: # 0
                 print("\n*** Cancelled ***")
             exit_fun()
-            return
+            
     else:
         print("\n!!! Movie ID not found !!!")
         exit_fun()
 
-
 # Update movie
 def fifth_Menu():
     print("\n< : : : : Update Movie by ID : : : : >\n")
-    id_only() #guiding
-    movie_id = int(input("Enter Movie ID to update: "))
+    id_only() # enter number only
+    try:
+        movie_id = int(input("Enter Movie ID to update: "))
+    except ValueError:
+        invalid()
+        exit_fun()
+        
 
     for movie in movies:
-        if movie.MovieID == movie_id:
-            print("Current Movie Info:", movie) # print relevent movie info
-            confirm = int(input("\n1 - confirm | 0 - cancel:\n ")) # update confirmation
+        if movie.Movie_id == movie_id:
+            print("Current Movie Info:", movie)
+            try:
+                confirm = int(input("\n1 - confirm | 0 - cancel:\n ")) # movie update confirmation
+            except ValueError:
+                invalid()
+                exit_fun()
+
             if confirm == 1:
-                movie.Title = input("Enter new title: ")
-                movie.Director = input("Enter new director: ")
-                year_only() #guiding
-                movie.Year = int(input("Enter new release year: "))
-                movie.Genre = input("Enter new genre: ")
+                movie.title = input("Enter new title: ")
+                movie.director = input("Enter new director: ")
+                year_only() # enter number only
+                try:
+                    movie.year = int(input("Enter new release year: "))
+                except ValueError:
+                    invalid()
+                    exit_fun()
+                 
+                movie.genre = input("Enter new genre: ")
                 print("\n*** Movie updated successfully ***")
-            else:
+            else: # 0
                 print("\n!!! Cancelled !!!")
             exit_fun()
-            return
-
-    print("\n!!! Movie ID not found !!!")
-    exit_fun()
-
+            
+    else: # Movie_id != movie_id:
+        print("\n!!! Movie ID not found !!!")
+        exit_fun()
 
 # Start program
 menu()
